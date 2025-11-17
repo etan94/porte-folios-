@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portfolio — Le_boss👑</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+  :root{--bg:#071017;--card:#0f1520;--muted:#bfc3c7;--accent:#d4af37;--glass:rgba(255,255,255,0.03);--glass-2:rgba(255,255,255,0.02)}
+  [data-theme="light"]{--bg:#f6f7fb;--card:#fff;--muted:#444;--accent:#c68b00;--glass:rgba(0,0,0,0.04);--glass-2:rgba(0,0,0,0.02)}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(120deg,#041018 0%,#07151d 100%);background-color:var(--bg);color:#e9eef2}
+
+  /* HEADER */
+  .header{position:sticky;top:0;z-index:80;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);backdrop-filter:blur(4px);display:flex;justify-content:space-between;align-items:center;padding:12px 20px}
+  .logo{display:flex;gap:10px;align-items:center;font-weight:800;font-size:18px}
+  .logo .crown{display:inline-block;transform-origin:center;animation:crown-rotate 6s linear infinite}
+  @keyframes crown-rotate{0%{transform:rotate(0deg)}50%{transform:rotate(4deg)}100%{transform:rotate(0deg)}}
+  .navbar{display:flex;gap:10px;align-items:center}
+  .nav-link{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;font-weight:600}
+  .nav-link:hover{color:var(--accent);background:var(--glass)}
+  .theme-btn{background:transparent;border:0;color:var(--muted);padding:8px;border-radius:8px;cursor:pointer}
+  .hamburger{display:none;border:0;background:transparent;color:var(--muted)}
+
+  /* PAGES */
+  .page{display:none;padding:28px;min-height:60vh}
+  .page.active{display:block}
+
+  /* HERO */
+  .hero{position:relative;min-height:320px;display:flex;align-items:center;justify-content:center;padding:36px 20px;overflow:hidden}
+  #heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  .hero-inner{position:relative;z-index:2;text-align:center}
+  .title{font-size:34px;margin:0;color:var(--accent);font-weight:800;letter-spacing:1px}
+  .subtitle{color:var(--muted);margin-top:6px}
+  .cta{margin-top:18px;display:inline-flex;gap:10px}
+  .btn-primary{padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#ffd97a);color:#111;font-weight:700;border:0}
+  .btn-ghost{padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted)}
+
+  /* layout */
+  .container{max-width:1100px;margin:0 auto}
+  h2{color:var(--accent);margin:6px 0 14px}
+
+  /* PROJECTS */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .card{background:var(--card);padding:16px;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.45);transform:translateZ(0);transition:transform .35s,box-shadow .35s}
+  .card:hover{transform:translateY(-8px) rotateX(2deg);box-shadow:0 14px 40px rgba(0,0,0,0.6)}
+  .card h3{margin:0 0 8px}
+  .meta-row{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+
+  /* MEDIA GALLERY */
+  .search-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .search-bar{flex:1;min-width:220px;padding:10px;border-radius:10px;border:0;background:var(--card);color:inherit}
+  .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+  .media-item{background:var(--card);padding:8px;border-radius:10px;text-align:center;overflow:hidden;position:relative}
+  .media-item img,.media-item video{width:100%;height:140px;object-fit:cover;border-radius:8px}
+  .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);font-size:12px;margin:6px 4px 0}
+
+  /* LIGHTBOX */
+  .lightbox{position:fixed;inset:0;background:rgba(2,6,12,0.75);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
+  .lightbox.open{opacity:1;pointer-events:auto}
+  .lightbox-content{max-width:90%;max-height:90%}
+  .lightbox img,.lightbox video{max-width:100%;max-height:100%;border-radius:8px}
+
+  /* ADMIN PAGE */
+  .admin-panel{max-width:920px;margin:0 auto;background:var(--card);padding:16px;border-radius:12px}
+  .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .input{padding:8px;border-radius:8px;border:0;background:var(--glass);min-width:140px}
+
+  /* CONTACT */
+  .contact-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:12px}
+
+  /* TIMELINE + STATS */
+  .profile-grid{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}
+  .avatar{width:200px;height:200px;border-radius:16px;background:linear-gradient(135deg,#111,#0c0f14);display:flex;align-items:center;justify-content:center;font-size:28px}
+  .stats{display:flex;gap:12px;margin-top:12px}
+  .stat{background:var(--card);padding:12px;border-radius:10px;min-width:110px;text-align:center}
+
+  /* back to top */
+  .back-top{position:fixed;right:18px;bottom:78px;background:var(--accent);color:#071017;padding:10px;border-radius:10px;display:none;cursor:pointer}
+
+  /* responsive */
+  @media(max-width:860px){.profile-grid{grid-template-columns:1fr}.avatar{width:100%;height:160px}.navbar{display:none}.hamburger{display:inline-block}}
+
+  /* small helpers */
+  .hidden{display:none}
+  .fade-in{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+  .fade-in.visible{opacity:1;transform:none}
+
+  </style>
+</head>
+<body data-theme="dark">
+  <header class="header container">
+    <div class="logo"><span class="text">Le_boss</span><span class="crown">👑</span></div>
+    <nav class="navbar">
+      <a class="nav-link" href="#/">Accueil</a>
+      <a class="nav-link" href="#/projets">Projets</a>
+      <a class="nav-link" href="#/medias">Médias</a>
+      <a class="nav-link" href="#/profile">Profil</a>
+      <a class="nav-link" href="#/documents">Documents</a>
+      <a class="nav-link" href="#/admin">Admin</a>
+      <button id="themeToggle" class="theme-btn" title="Basculer le thème"><i class="fas fa-moon"></i></button>
+    </nav>
+    <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+  </header>
+
+  <!-- PAGES (SPA style, hash routing) -->
+  <main>
+    <!-- Home / Index -->
+    <section id="page-home" class="page active">
+      <section class="hero">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-inner">
+          <h1 class="title">Le_boss👑 — Portfolio Royal</h1>
+          <p class="subtitle">Création • Développement • Vision</p>
+          <div class="cta">
+            <button class="btn-primary" onclick="navigate('/projets')">Découvrir</button>
+            <button class="btn-ghost" onclick="navigate('/admin')">Admin</button>
+          </div>
+        </div>
+      </section>
+      <div class="container">
+        <section class="section">
+          <h2>À propos</h2>
+          <div class="profile-grid">
+            <div>
+              <div class="avatar">Le_boss👑</div>
+              <div class="stats">
+                <div class="stat"><div class="num" data-count="12">0</div><div class="muted">Projets</div></div>
+                <div class="stat"><div class="num" data-count="34">0</div><div class="muted">Médias</div></div>
+                <div class="stat"><div class="num" data-count="3">0</div><div class="muted">Années</div></div>
+              </div>
+            </div>
+            <div>
+              <p>Je suis <strong>Le_boss👑</strong>, créateur de contenus et développeur. J'aime les interfaces premium, les animations soignées et partager mes projets.</p>
+              <h3>Timeline</h3>
+              <ul>
+                <li>2022 — Début des premiers projets</li>
+                <li>2023 — Photographie & vidéos</li>
+                <li>2024 — Projets web pro</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Projets page -->
+    <section id="page-projets" class="page">
+      <div class="container">
+        <h2>Projets</h2>
+        <div id="projectsGrid" class="card-grid"></div>
+      </div>
+    </section>
+
+    <!-- Medias page -->
+    <section id="page-medias" class="page">
+      <div class="container">
+        <h2>Médias</h2>
+        <div class="search-row">
+          <input id="searchInput" class="search-bar" placeholder="Rechercher un média, tag, nom..." />
+          <div id="tagsRow"></div>
+        </div>
+        <div id="mediaGrid" class="media-grid"></div>
+      </div>
+    </section>
+
+    <!-- Profile page -->
+    <section id="page-profile" class="page">
+      <div class="container">
+        <h2>Profil</h2>
+        <div class="profile-grid">
+          <div class="avatar">Le_boss👑</div>
+          <div>
+            <p><strong>Le_boss👑</strong> — Portfolio, Projets, Médias. Développeur & créateur.</p>
+            <h3>Compétences</h3>
+            <ul><li>HTML / CSS / JS</li><li>Design UI</li><li>Montage vidéo</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Documents page -->
+    <section id="page-documents" class="page">
+      <div class="container">
+        <h2>Documents</h2>
+        <div id="docsGrid" class="card-grid"></div>
+      </div>
+    </section>
+
+    <!-- Admin page (full) -->
+    <section id="page-admin" class="page">
+      <div class="container">
+        <h2>Dashboard Admin</h2>
+        <div class="admin-panel">
+          <div id="adminAuth">
+            <p>Mot de passe admin (local) : <code>le_boss_admin</code></p>
+            <div class="form-row"><input id="adminPwd" class="input" type="password" placeholder="Mot de passe" /><button id="adminEnter" class="btn-primary">Entrer</button></div>
+          </div>
+
+          <div id="adminArea" class="hidden">
+            <h3>Ajouter un projet</h3>
+            <div class="form-row">
+              <input id="newProjTitle" class="input" placeholder="Titre" />
+              <input id="newProjTags" class="input" placeholder="Tags (virgule)" />
+            </div>
+            <textarea id="newProjDesc" class="input" placeholder="Description" style="width:100%;margin-top:8px"></textarea>
+            <div style="margin-top:8px"><button id="createProj" class="btn-primary">Créer le projet</button></div>
+
+            <h3 style="margin-top:12px">Uploader des médias</h3>
+            <input id="adminFileInput" type="file" multiple />
+
+            <h3 style="margin-top:12px">Projets existants</h3>
+            <div id="adminProjectsList"></div>
+
+            <h3 style="margin-top:12px">Médias existants</h3>
+            <div id="adminMediaList"></div>
+
+            <h3 style="margin-top:12px">Paramètres</h3>
+            <div class="form-row">
+              <input id="changeAdminPwd" class="input" placeholder="Nouveau mot de passe" />
+              <button id="saveSettings" class="btn-ghost">Enregistrer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <button id="backTop" class="back-top">↑ Haut</button>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden">
+    <div class="lightbox-content" id="lightboxContent"></div>
+  </div>
+
+  <script>
+  // ---------- Simple SPA routing (hash-based) ----------
+  const routes = {
+    '/': 'page-home',
+    '/projets': 'page-projets',
+    '/medias': 'page-medias',
+    '/profile': 'page-profile',
+    '/documents': 'page-documents',
+    '/admin': 'page-admin'
+  };
+  function navigate(path){ location.hash = '#'+path; }
+  function onRoute(){ const path = location.hash.replace('#','') || '/'; Object.values(routes).forEach(id=> document.getElementById(id).classList.remove('active'));
+    const pageId = routes[path] || routes['/']; document.getElementById(pageId).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
+  }
+  window.addEventListener('hashchange', onRoute); window.addEventListener('load', onRoute);
+
+  // ---------- Data & storage ----------
+  const storageKey = 'le_boss_site_v2';
+  const defaultData = { projects:[{id:'p1',title:'Site vitrine',desc:'Site vitrine moderne, animations CSS',tags:['web','css']},{id:'p2',title:'Mini jeu',desc:'Jeu en JS avec système de quêtes',tags:['js','game']}], medias:[{id:'m1',type:'image',title:'Coucher de soleil',src:'assets/images/image1.jpg',tags:['photo']},{id:'m2',type:'video',title:'Présentation',src:'assets/videos/video1.mp4',tags:['video']},{id:'m3',type:'doc',title:'CV Le_boss',src:'assets/docs/doc1.pdf',tags:['cv']}] };
+  function load(){ const raw=localStorage.getItem(storageKey); if(raw) return JSON.parse(raw); localStorage.setItem(storageKey,JSON.stringify(defaultData)); return defaultData; }
+  function save(){ localStorage.setItem(storageKey,JSON.stringify(DATA)); }
+  let DATA = load();
+
+  // ---------- Renderers ----------
+  function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  function renderProjectsGrid(){ const g=document.getElementById('projectsGrid'); g.innerHTML=''; DATA.projects.forEach(p=>{ const el=document.createElement('div'); el.className='card fade-in'; el.innerHTML=`<h3>${escapeHtml(p.title)}</h3><div class="meta-row">${(p.tags||[]).map(t=>'<span class="tag">'+escapeHtml(t)+'</span>').join('')}</div><p style="margin-top:10px">${escapeHtml(p.desc)}</p><div style=\"margin-top:10px;display:flex;gap:8px\"><button class=\"btn-primary\" onclick=\"openProject(\'${p.id}\')\">Voir</button></div>`; g.appendChild(el); }); observeReveal(); }
+
+  function renderMediaGrid(q=''){ const g=document.getElementById('mediaGrid'); g.innerHTML=''; const Q=(q||'').toLowerCase(); DATA.medias.forEach(m=>{ if(Q && !(m.title.toLowerCase().includes(Q) || (m.tags||[]).join(',').includes(Q))) return; const d=document.createElement('div'); d.className='media-item fade-in'; d.innerHTML = m.type==='image' ? `<img src='${m.src}' alt='${escapeHtml(m.title)}' onclick="openLight('${m.id}')" />` : (m.type==='video' ? `<video controls src='${m.src}' onclick="openLight('${m.id}')"></video>` : `<a href='${m.src}' target='_blank'><i class='fas fa-file'></i> ${escapeHtml(m.title)}</a>`); d.innerHTML += `<div style=\"margin-top:8px;text-align:left\"><strong>${escapeHtml(m.title)}</strong>${(m.tags||[]).map(t=>'<span class=\"tag\">'+escapeHtml(t)+'</span>').join('')}</div>`; g.appendChild(d); }); observeReveal(); }
+
+  function renderDocs(){ const g=document.getElementById('docsGrid'); g.innerHTML=''; DATA.medias.filter(m=>m.type==='doc').forEach(d=>{ const el=document.createElement('div'); el.className='card'; el.innerHTML = `<h4>${escapeHtml(d.title)}</h4><p><a href='${d.src}' target='_blank'>Télécharger / Voir</a></p>`; g.appendChild(el); }); }
+
+  function renderTags(){ const r=document.getElementById('tagsRow'); r.innerHTML=''; const set=new Set(DATA.medias.flatMap(m=>m.tags||[])); set.forEach(t=>{ const b=document.createElement('button'); b.className='tag'; b.textContent=t; b.addEventListener('click', ()=>{ document.getElementById('searchInput').value=t; renderMediaGrid(t); }); r.appendChild(b); }); }
+
+  // ---------- Lightbox & Project modal ----------
+  const lightbox = document.getElementById('lightbox'); const lightboxContent = document.getElementById('lightboxContent');
+  function openLight(id){ const m=DATA.medias.find(x=>x.id===id); if(!m) return; lightboxContent.innerHTML=''; lightbox.classList.add('open'); if(m.type==='image'){ const img=document.createElement('img'); img.src=m.src; lightboxContent.appendChild(img);} else if(m.type==='video'){ const v=document.createElement('video'); v.src=m.src; v.controls=true; v.autoplay=true; lightboxContent.appendChild(v);} else { lightboxContent.innerHTML=`<iframe src='${m.src}' style='width:80vw;height:80vh;border:0'></iframe>`; } }
+  lightbox.addEventListener('click', e=>{ if(e.target===lightbox) lightbox.classList.remove('open'); });
+
+  function openProject(id){ const p=DATA.projects.find(x=>x.id===id); if(!p) return; lightboxContent.innerHTML=`<div style="background:var(--card);padding:18px;border-radius:12px;max-width:760px;color:inherit"><h2>${escapeHtml(p.title)}</h2><p>${escapeHtml(p.desc)}</p><div style="margin-top:10px">Tags: ${(p.tags||[]).map(t=>'<span class=\"tag\">'+escapeHtml(t)+'</span>').join('')}</div><div style=\"margin-top:12px;display:flex;gap:8px\"><button class=\"btn-primary\" onclick=\"document.getElementById(\'lightbox\').classList.remove(\'open\');\">Fermer</button></div></div>`; lightbox.classList.add('open'); }
+
+  // ---------- Admin: entry, CRUD (localStorage) ----------
+  const adminEnter = document.getElementById('adminEnter'); const adminPwd = document.getElementById('adminPwd'); const adminArea = document.getElementById('adminArea');
+  adminEnter.addEventListener('click', ()=>{ const stored = localStorage.getItem('le_boss_admin_pwd') || 'le_boss_admin'; if(adminPwd.value===stored){ document.getElementById('adminAuth').style.display='none'; adminArea.classList.remove('hidden'); populateAdmin(); } else alert('Mauvais mot de passe'); });
+
+  function populateAdmin(){ // projects
+    const list = document.getElementById('adminProjectsList'); list.innerHTML=''; DATA.projects.forEach(p=>{ const el=document.createElement('div'); el.className='card'; el.style.marginBottom='8px'; el.innerHTML=`<strong>${escapeHtml(p.title)}</strong> — <small>${(p.tags||[]).join(', ')}</small><div style="margin-top:6px"><button class=\"btn-ghost\" onclick=\"editProj('${p.id}')\">Éditer</button> <button class=\"btn-ghost\" onclick=\"deleteProj('${p.id}')\">Supprimer</button></div>`; list.appendChild(el); });
+    const mlist=document.getElementById('adminMediaList'); mlist.innerHTML=''; DATA.medias.forEach(m=>{ const el=document.createElement('div'); el.className='card'; el.style.marginBottom='8px'; el.innerHTML=`<strong>${escapeHtml(m.title)}</strong> — ${escapeHtml(m.type)} <div style="margin-top:6px"><button class=\"btn-ghost\" onclick=\"deleteMedia('${m.id}')\">Supprimer</button></div>`; mlist.appendChild(el); });
+  }
+
+  document.getElementById('createProj').addEventListener('click', ()=>{ const title=document.getElementById('newProjTitle').value.trim(); const tags=document.getElementById('newProjTags').value.split(',').map(s=>s.trim()).filter(Boolean); const desc=document.getElementById('newProjDesc').value.trim(); if(!title) return alert('Titre requis'); const id='p'+Date.now(); DATA.projects.push({id,title,desc,tags}); save(); renderProjectsGrid(); populateAdmin(); alert('Projet ajouté'); document.getElementById('newProjTitle').value=''; document.getElementById('newProjTags').value=''; document.getElementById('newProjDesc').value=''; });
+
+  document.getElementById('adminFileInput').addEventListener('change', e=>{ const files=Array.from(e.target.files); files.forEach(f=>{ const r=new FileReader(); r.onload=()=>{ const id='m'+Date.now(); const type = f.type.startsWith('image/') ? 'image' : f.type.startsWith('video/') ? 'video' : 'doc'; DATA.medias.push({id,type,title:f.name,src:r.result,tags:[]}); save(); renderMediaGrid(document.getElementById('searchInput').value); populateAdmin(); }; r.readAsDataURL(f); }); alert('Fichiers ajoutés (local)'); });
+
+  function deleteProj(id){ if(!confirm('Supprimer ce projet ?')) return; DATA.projects = DATA.projects.filter(p=>p.id!==id); save(); renderProjectsGrid(); populateAdmin(); }
+  function deleteMedia(id){ if(!confirm('Supprimer ce média ?')) return; DATA.medias = DATA.medias.filter(m=>m.id!==id); save(); renderMediaGrid(document.getElementById('searchInput').value); populateAdmin(); }
+
+  document.getElementById('saveSettings').addEventListener('click', ()=>{ const np = document.getElementById('changeAdminPwd').value.trim(); if(!np) return alert('Mot de passe vide'); localStorage.setItem('le_boss_admin_pwd', np); alert('Mot de passe mis à jour'); document.getElementById('changeAdminPwd').value=''; });
+
+  // ---------- Search, tags, reveal, counters ----------
+  document.getElementById('searchInput').addEventListener('input', e=> renderMediaGrid(e.target.value));
+  function observeReveal(){ const els=document.querySelectorAll('.fade-in'); const io=new IntersectionObserver(entries=>{ entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('visible'); io.unobserve(en.target); } }); },{threshold:0.12}); els.forEach(el=>io.observe(el)); }
+
+  function runCounters(){ document.querySelectorAll('.num').forEach(el=>{ const to=+el.getAttribute('data-count')||0; let cur=0; const step=Math.max(1,Math.round(to/40)); const iv=setInterval(()=>{ cur+=step; if(cur>=to){ el.textContent=to; clearInterval(iv);} else el.textContent=cur; },30); }); }
+
+  // ---------- Hero canvas particles ----------
+  (function(){ const canvas=document.getElementById('heroCanvas'); if(!canvas) return; const ctx=canvas.getContext('2d'); let W,H,parts=[]; function resize(){W=canvas.width=canvas.clientWidth;H=canvas.height=canvas.clientHeight} window.addEventListener('resize',resize); resize(); for(let i=0;i<60;i++) parts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*2+0.5}); function frame(){ ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter'; parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0; ctx.fillStyle='rgba(212,175,55,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(frame); } frame(); })();
+
+  // ---------- Small UX ----------
+  (function(){ const btn=document.getElementById('themeToggle'); const body=document.body; const icon=btn.querySelector('i'); const stored = localStorage.getItem('site_theme') || 'dark'; body.setAttribute('data-theme',stored); icon.className = stored==='dark' ? 'fas fa-moon' : 'fas fa-sun'; btn.addEventListener('click', ()=>{ const cur=body.getAttribute('data-theme'); const next = cur==='dark' ? 'light' : 'dark'; body.setAttribute('data-theme', next); localStorage.setItem('site_theme', next); icon.className = next==='dark' ? 'fas fa-moon' : 'fas fa-sun'; }); const back=document.getElementById('backTop'); window.addEventListener('scroll', ()=>{ back.style.display = window.scrollY>200 ? 'block' : 'none'; }); back.addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'})); const ham=document.getElementById('hamburger'); ham.addEventListener('click', ()=>{ const nav=document.querySelector('.navbar'); nav.style.display = nav.style.display==='flex' ? 'none' : 'flex'; }); })();
+
+  // ---------- Init ----------
+  function init(){ renderProjectsGrid(); renderMediaGrid(); renderDocs(); renderTags(); runCounters(); }
+  init();
+
+  </script>
+</body>
+</html>
