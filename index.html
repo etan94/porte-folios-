@@ -258,6 +258,9 @@
   function save(){ localStorage.setItem(storageKey,JSON.stringify(DATA)); }
   let DATA = load();
 
+  {projects:[{id:'p1',title:'Site vitrine',desc:'Site vitrine moderne, animations CSS',tags:['web','css']},{id:'p2',title:'Mini jeu',desc:'Jeu en JS avec système de quêtes',tags:['js','game'] ICI AVEC UNE virgule}
+  {id:'p1',title:'Site vitrine',desc:'Site vitrine moderne, animations CSS',tags:['web','css']} 
+    
   // ---------- Renderers ----------
   function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
